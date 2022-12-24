@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>abPicZoom是一款基于Agilebins和jQuery实现的图片放大功能的插件</title>
+<meta name="keywords" content="格晒特效,格晒插件,abPicZoom,jQuery插件" />
+<meta name="description" content="abPicZoom下载，格晒js特效插件abPicZoom.js是一款基于jQuery运行的滚动条开源特效插件，使用方便通过配置一定的参数，来设置放大镜的外观样式等属性。需结合agilebins特效插件的图功能来实现放大镜的多图切换效果。特别适合需要图片放大展示类等站点，例如商城。兼容IE6+ Safari Opera Firefox Chrome等大部分浏览器。" />
+
+<script src="https://www.jq22.com/jquery/jquery-1.7.1.js"></script><!-- jquery.min.js必须存在 -->
+<script type="text/javascript" src="js/jquery.agilebins-v1.0.4.min.js"></script><!-- jquery.agilebins-v1.0.4.min.js必须存在 -->
+<script type="text/javascript" src="js/jquery.abPicZoom.min.js"></script><!-- jquery.abPicZoom.min.js必须存在 -->
+
+<style type="text/css">
+*{margin:0;padding:0}body{background:#0c91e8;font-size:12px;color:#183b52}ul,li{list-style:none}p{word-wrap:break-word}img{border:0;vertical-align:middle}a{color:#eef7fe;text-decoration:none}a:hover{color:#fff;text-decoration:none}.demo-intro2 .p1{font-size:14px;line-height:24px;padding:0 0 10px 0}.demo-intro2 .p2{font-size:18px;padding:20px 10px 0 0;font-style:italic;display:block;font-weight:bold;height:40px;line-height:24px}.demo-intro2 a{color:#183b52;text-decoration:none}.demo-intro2 a:hover{color:#fff;text-decoration:none}.codeHd{text-align:center;font-size:14px}.codeHd p{line-height:28px;color:#183b52;padding-bottom:30px}.codeHd p.p1{padding:0 200px 30px 200px}.codeHd p strong{text-align:center;font-weight:700}.codeHd p span{font-style:italic;font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- 头部开始 -->
+<div style="text-align:center;padding:120px 0 180px 0;"><div class="logo z"><h2 style="color:#ebf7fe;font-size:38px;line-height:50px;font-weight:bold;font-style:italic;"><a href="http://ab.geshai.com/other-plus/abPicZoom/abPicZoom.html" title="abPicZoom v1.02" target="_blank">abPicZoom</a></h2><p style="font-size:13px;font-style:italic;color:#ddf0fb;">图片模拟放大镜插件 v1.0</p></div></div>
+<!-- 头部结束 -->
+
+
+
+<!-- ==============================  插件效果 css 开始 ============================== -->
+<style type="text/css">
+.demo-body { width:760px; margin:0 auto; }
+.abPicZoom-preview { width:342px; }
+
+/* 预览图 */
+.abPicZoom-preview .bigImg { width:310px; height:380px; padding:5px; border:1px solid #E4E4E4; box-shadow:0 6px 20px #107cc3; border-radius:30px; background:#fff; overflow:hidden; }
+	.abPicZoom-preview .bigImg li { width:310px; height:380px; overflow:hidden; }
+		.abPicZoom-preview .preview, .abPicZoom-preview .bigImg li img { border-radius:30px; }
+
+/*选择器*/
+.abPicZoom-preview .selector { cursor:move; filter:alpha(opacity=20); -moz-opacity:0.2; opacity:0.2; background-color:#000; border:1px solid #eee; width:160px; height:160px; background-image:url(images/selector_bg.png); border-radius:30px; }
+
+/* 缩略图 */
+.abPicZoom-preview .smallImg { position:relative; width:322px; height:75px; overflow:hidden; }
+	.abPicZoom-preview .smallImg .smallList { width:248px; margin:0 auto; overflow:hidden; }
+		.abPicZoom-preview .smallImg li { float:left; width:52px; padding:15px 5px 10px 5px; }
+			.abPicZoom-preview .smallImg li img { border-radius:8px; width:50px; height:48px; cursor:pointer; }
+			.abPicZoom-preview .smallImg li a { background:#0c91e8; border:1px solid #0c91e8; border-radius:8px; width:50px; height:48px; box-shadow:0 2px 6px #107cc3; display:block; }
+			.abPicZoom-preview .smallImg li.on a { background:#4ad585; border:1px solid #4ad585; border-radius:8px; width:50px; height:48px; display:block; }
+			.abPicZoom-preview .smallImg li a:hover, .abPicZoom-preview .smallImg li.on a:hover { border:1px solid #3dc878; }
+
+/*上下按钮*/
+.abPicZoom-preview .sPrev, .abPicZoom-preview .sNext { border-radius:10px; box-shadow:0 2px 6px #107cc3; z-index:2; position: absolute; top:17px; width:18px; height:48px; background:#212121; font-size:18px; line-height:48px; color:#ccc; text-align:center; display:block; }
+	.abPicZoom-preview .sPrev { left:10px; } .abPicZoom-preview .sNext { right:10px; }
+	.abPicZoom-preview .sPrev:hover, .abPicZoom-preview .sNext:hover { color:#fff; background:#000; }
+
+</style>
+<!-- ==============================  插件效果 css 结束 ============================== -->
+
+
+<div class="demo-body">
+	<!-- 插件HTML代码效果开始 -->
+    <div class="abPicZoom-preview" style="float:left; margin-right:30px;">
+        <div class="bigImg">
+        	<ul>
+                <li><img src="images/mid/1.jpg" preview="images/big/1.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/2.jpg" preview="images/big/2.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/3.jpg" preview="images/big/3.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/4.jpg" preview="images/big/4.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/5.jpg" preview="images/big/5.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/6.jpg" preview="images/big/6.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/7.jpg" preview="images/big/7.jpg" width="310" height="380" /></li>
+                <li><img src="images/mid/8.jpg" preview="images/big/8.jpg" width="310" height="380" /></li>
+            </ul>
+        </div>
+        <div style="clear:both"></div>                
+        <div class="smallImg">
+            <div class="smallList">
+                <ul>
+                    <li><a href="javascript:;"><img src="images/small/1.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/2.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/3.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/4.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/5.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/6.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/7.jpg" width="50" height="48" /></a></li>
+                    <li><a href="javascript:;"><img src="images/small/8.jpg" width="50" height="48" /></a></li>
+                </ul>
+            </div>
+            <a href="javascript:;" class="sPrev">&lsaquo;</a>
+            <a href="javascript:;" class="sNext">&rsaquo;</a>
+        </div>
+    </div>
+    <!-- 插件HTML代码效果结束// -->
+    
+     <!-- 插件介绍 开始// -->
+    <div class="demo-intro2" style="height:400px;">
+    	<dl class="pd-01">
+    		<dt class="p2">插件介绍</dt>
+            <dd class="p1">abPicZoom是一款实用的图片放大功能的插件。</dd>
+            <dd class="p1">使用方便通过配置一定的参数，来设置放大镜的外观样式等属性。需结合<a href="https://www.jq22.com/jquery-info24416" target="_blank">agilebins</a>特效插件的组图功能来实现放大镜的多图切换效果。<br>特别适合需要图片放大展示类的站点，例如商城。</dd>
+            <dd class="p1">兼容<span  class="a1">IE6+ Safari Opera Firefox Chrome</span>等大部分浏览器。</dd>
+        </dl>
+    </div><!-- 插件介绍 结束// --> 
+</div>
+
+
+<!-- 插件js代码调用开始 -->
+<script type="text/javascript">
+	$(".abPicZoom-preview").agilebins({
+		pnLoop: true, /* 是否需要按钮前后循环(true | false) */
+		direction: "left", /* 滑动方向（当type为slide时有效）: top向上|right向右|bottom向下| left向左 */
+		scrollEl: ".smallImg ul", /* 滚动列表容器元素 */
+		mainEl: ".bigImg ul", /* 切换内容容器元素 */
+		previewClass:"preview",
+		visNum: 4, /* 显示个数 */
+		scrollNum: 4, /* 每次滚动为1个，一般不超过visNum设置的个数 */
+		speed: 0, /* 动画过渡效果延迟时间(毫秒) */
+		mPrev: ".sPrev", /* 切换按钮，上一个 */
+		mNext: ".sNext",  /* 切换按钮，下一个 */
+		eventType: "click", /*  事件类型: mouseover | click  */
+		startFunc: function(i){
+			$(".abPicZoom-preview").abPicZoom({marginLeft: 10, selectorClass: "selector", selector: $(".bigImg li img").eq(i)});/* agilebins扩展调用abPicZoom图片放大镜功能 */
+		}
+	});
+</script>
+<!-- 插件js代码调用结束 -->
+
+
+
+
+
+
+
+<div style="width: 1200px; margin: 0 auto; padding: 100px 0 140px 0;">
+<div style="height:0;clear:both;overflow:hidden;"></div>
+<div style="height:100px;"></div>
+    <div style="text-align:center;font-style:italic;letter-spacing:.05em;color:#183b52;"><h2 style="font-size:24px;height:120px;line-height:120px;font-weight:bold;">一. 基础使用设置</h2></div>
+    <div class="codeHd">
+    <p class="p1">在网页的头部引用jQuery和agilebins和abPicZoom三个必需的js既将jquery和agilebins和abPicZoom包含在head标中或位于关闭正文标记之前。请确保在和abPicZoom之前包含agilebins，agilebins之前包含jquery前后顺序不能乱。</p>
+    </div>
+    
+    <div style="text-align:center;font-style:italic;letter-spacing:.05em;color:#183b52;"><h2 style="font-size:24px;height:120px;line-height:120px;font-weight:bold;">二. 编写html代码</h2></div>
+    <div class="codeHd">
+    <p class="p1">创建一个div的父层，如此例子abPicZoom-preview。在其内部为每一个幻灯片创建一个目标元素.bigImg和.smallImg和.smallList，使用css控制其样式。jQuery和abPicZoom和agilebins将选定父层元素内的层标签与样式应用于它们，并按照您的喜好定位。</p>
+    </div>
+    
+    <div style="text-align:center;font-style:italic;letter-spacing:.05em;color:#183b52;"><h2 style="font-size:24px;height:120px;line-height:120px;font-weight:bold;">三. 编写例子css样式</h2></div>
+    <div class="codeHd">
+    <p class="p1">编写 html 和 css 样式时一定要注意，父层元素和容器层元素，都必须具有指定的宽度和高度，jquery.agilebins-v1.0.4.min.js 才能正常的工作。</p>
+    </div>
+    
+    <div style="text-align:center;font-style:italic;letter-spacing:.05em;color:#183b52;"><h2 style="font-size:24px;height:120px;line-height:120px;font-weight:bold;">四. 调用参数的设置</h2></div>
+    <div class="codeHd">
+    <p class="p1">在要使用效果的div父层abPicZoom-preview外，放置调用代码即可实现效果。建议把每个页面的调用，统一放在页尾&lt;/body&gt; &lt;/html&gt;标签关闭之前，方便维护与管理。注意调用代码必须放在引用jquery和agilebins和abPicZoom之后的位置才能正常使用</p>
+    </div>   
+    
+</div>
+
+
+
+
+<!-- 页尾 -->
+<div style="height:100px;"></div><div style="width:42px;height:42px;margin:0 auto 0 auto;"><a style="width:42px;height:42px;line-height:42px;font-weight:500;background:#3dc878;display:block;font-size:12px;font-style:italic;color:#fff;text-align:center;border-radius:50px;box-shadow:0px 4px 10px 0px rgb(16 124 195);"title="返回顶部" href="javascript:scroll(0,0);">Top</a></div><div style="height:150px;"></div>
+</body>
+</html>
