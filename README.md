@@ -7,15 +7,19 @@ abPicZoom是一款实用的图片放大功能的插件。 使用方便通过配�
 使用说明以及注意事项如下：
 
 1、首先引用jQuery v1.8.3+版本 ( 更低版本能兼容到jQuery1.43推荐使用jQuery1.8.3+ )
+
    目录地址 js/jquery.min.js
 
 
 2、使用组图功能需要引用agilebins
+
    目录地址 js/jquery.agilebins-v1.0.4.min.js 迷你压缩版（开发版在jq22站内搜索AgileBins下载）
 
 
 3、引用abPicZoom所需相关插件
 
    目录地址
+
    js/abPicZoom-v1.0.js 开发版（不推荐直接使用）
+
    js/jquery.abPicZoom.min.js 迷你压缩版（推荐直接使用）   
