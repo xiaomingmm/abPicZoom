@@ -5,7 +5,7 @@
 * 
 * 有疑难问题可选择QQ群① 158544200或QQ群② 790370978进行反馈
 * 
-* 更多详尽信息请看官网 http://ab.geshai.com/other-plus/abScrollBar/abPicZoom/
+* 更多详尽信息请看官网 http://ab.geshai.com/other-plus/abPicZoom/
 ---------------------------------------
 使用说明以及注意事项如下：
 
